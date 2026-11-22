@@ -1,0 +1,19 @@
+name: build-rpc-server
+on:
+  workflow_dispatch:
+jobs:
+  linux-x64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: sudo apt-get update && sudo apt-get install -y pkg-config libssl-dev perl
+      - run: cargo build --release --package deltachat-rpc-server
+      - run: strip target/release/deltachat-rpc-server || true
+      - name: upload release asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+          tag="rpc-server-$(date +%Y%m%d-%H%M)"
+          gh release create "$tag" --title "deltachat-rpc-server linux-x64 $tag" --notes "CI build of encore deltachat-rpc-server (linux x64)." target/release/deltachat-rpc-server

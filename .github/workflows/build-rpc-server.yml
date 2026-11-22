@@ -9,13 +9,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - run: sudo apt-get update && sudo apt-get install -y pkg-config libssl-dev perl
-      - run: cargo build --release --package deltachat-rpc-server
-      - run: strip target/release/deltachat-rpc-server || true
+        with:
+          targets: x86_64-unknown-linux-musl
+      - run: sudo apt-get update && sudo apt-get install -y musl-tools pkg-config perl
+      - run: cargo build --release --package deltachat-rpc-server --target x86_64-unknown-linux-musl
+      - name: verify static binary
+        run: |
+          set -e
+          file target/x86_64-unknown-linux-musl/release/deltachat-rpc-server
+          file target/x86_64-unknown-linux-musl/release/deltachat-rpc-server | grep -q 'statically linked'
+      - run: strip target/x86_64-unknown-linux-musl/release/deltachat-rpc-server || true
       - name: upload release asset
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -e
-          tag="rpc-server-$(date +%Y%m%d-%H%M)"
-          gh release create "$tag" --title "deltachat-rpc-server linux-x64 $tag" --notes "CI build of encore deltachat-rpc-server (linux x64)." target/release/deltachat-rpc-server
+          tag="rpc-server-musl-$(date +%Y%m%d-%H%M)"
+          gh release create "$tag" --title "deltachat-rpc-server linux-x64 static musl $tag" --notes "CI build of encore deltachat-rpc-server (linux x64, static musl)." target/x86_64-unknown-linux-musl/release/deltachat-rpc-server

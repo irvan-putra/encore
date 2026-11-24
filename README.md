@@ -1,3 +1,13 @@
+# encore
+
+A fork of [chatmail/core](https://github.com/chatmail/core), the Delta Chat core library.
+
+The only change from upstream is CI: the [build-rpc-server workflow](.github/workflows/build-rpc-server.yml) builds the `deltachat-rpc-server` static Linux x64 binary (musl, static-pie) on demand and uploads it to a release. The library code itself is unchanged from upstream. For documentation, issues and development, see the upstream project.
+
+The original upstream README follows below.
+
+---
+
 <p align="center">
 <img alt="Chatmail logo" src="https://github.com/user-attachments/assets/25742da7-a837-48cd-a503-b303af55f10d" width="300" style="float:middle;" />
 </p>

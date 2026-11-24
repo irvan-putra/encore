@@ -541,7 +541,7 @@ fn migrate_key_contacts(
                     let res = update_member_stmt.execute((new_member, old_member, chat_id));
                     if res.is_err() {
                         // The same chat partner exists multiple times in the chat,
-                        // with mutliple profiles which have different email addresses
+                        // with multiple profiles which have different email addresses
                         // but the same key.
                         // We can only keep one of them.
                         // So, if one of them is not in the chat anymore, delete it,
@@ -2052,7 +2052,7 @@ CREATE INDEX gossip_timestamp_index ON gossip_timestamp (chat_id, fingerprint);
                     // For non-chatmail accounts
                     // default "bcc_self" was "1".
                     // If it is not in the database,
-                    // save the old default explicity
+                    // save the old default explicitly
                     // as the new default is "0"
                     // for all accounts.
                     if !is_chatmail {
@@ -2274,7 +2274,7 @@ ALTER TABLE contacts ADD COLUMN name_normalized TEXT;
     // and self-sent messages are not sent there,
     // so that we don't cause extra messages to the corresponding inbox,
     // but can still receive messages from contacts who don't know our new transport addresses yet.
-    // The default is true, but when when the user updates the app,
+    // The default is true, but when the user updates the app,
     // existing secondary transports are set to unpublished,
     // so that an existing transport address doesn't suddenly get spammed with a lot of messages.
     inc_and_check(&mut migration_version, 149)?;

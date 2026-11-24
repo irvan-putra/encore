@@ -486,7 +486,7 @@ impl Accounts {
             let mut lock = self.background_fetch_interrupt_sender.lock();
             if (*lock).is_some() {
                 // Another background_fetch() is already running,
-                // return immeidately.
+                // return immediately.
                 None
             } else {
                 *lock = Some(sender);
@@ -890,7 +890,7 @@ impl Config {
     }
 }
 
-/// Spend up to 1 minute trying to do the operation.
+/// Try the operation 5 times, waiting 1 second between retries.
 ///
 /// Even if Delta Chat itself does not hold the file lock,
 /// there may be other processes such as antivirus,
@@ -909,7 +909,7 @@ where
         counter += 1;
 
         if let Err(err) = f().await {
-            if counter > 60 {
+            if counter >= 5 {
                 return Err(err);
             }
 

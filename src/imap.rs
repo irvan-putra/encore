@@ -140,7 +140,7 @@ pub(crate) struct ServerMetadata {
     pub max_smtp_rcpt_to: Option<u32>,
 
     /// True if we think the relay supports push notifications.
-    /// This gates wether we attempt to write an encrypted device token
+    /// This gates whether we attempt to write an encrypted device token
     /// to per-transport IMAP metadata key `/private/devicetoken`.
     ///
     /// Any `/shared/vendor/deltachat/` entry identifies a chatmail relay.
@@ -1108,7 +1108,7 @@ impl Session {
                 let Some(rfc724_mid) = uid_message_ids.get(&request_uid) else {
                     error!(
                         context,
-                        "No Message-ID corresponding to UID {} passed in uid_messsage_ids.",
+                        "No Message-ID corresponding to UID {} passed in uid_message_ids.",
                         request_uid
                     );
                     continue;

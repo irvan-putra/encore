@@ -2540,7 +2540,7 @@ async fn prepare_msg_blob(context: &Context, msg: &mut Message) -> Result<()> {
     // running numbers, etc.
     let filename: String = match viewtype_orig {
         Viewtype::Voice => format!(
-            "voice-messsage_{}.{suffix}",
+            "voice-message_{}.{suffix}",
             chrono::Utc
                 .timestamp_opt(msg.timestamp_sort, 0)
                 .single()
@@ -2688,7 +2688,9 @@ async fn prepare_send_msg(
             msg.param.get_int(Param::Reaction).unwrap_or_default() != 0
                 || matches!(
                     msg.param.get_cmd(),
-                    SystemMessage::MemberRemovedFromGroup | SystemMessage::SecurejoinMessage
+                    SystemMessage::MemberRemovedFromGroup
+                        | SystemMessage::SecurejoinMessage
+                        | SystemMessage::IrohNodeAddr
                 )
         }
         CantSendReason::MissingKey => msg
@@ -2761,7 +2763,7 @@ async fn prepare_send_msg(
 /// Pre-Message is a small message with metadata which announces a larger Post-Message.
 /// Post-Messages are not downloaded in the background.
 ///
-/// If pre-message is not nessesary, this returns `None` as the 0th value.
+/// If pre-message is not necessary, this returns `None` as the 0th value.
 async fn render_mime_message_and_pre_message(
     context: &Context,
     msg: &mut Message,
@@ -3796,7 +3798,7 @@ pub(crate) async fn remove_from_chat_contacts_table(
 ///
 /// Note that if we call this function,
 /// and then receive a message from another device
-/// that doesn't know that this this member was removed
+/// that doesn't know that this member was removed
 /// then the group membership algorithm will wrongly re-add this member.
 pub(crate) async fn remove_from_chat_contacts_table_without_trace(
     context: &Context,
@@ -4695,7 +4697,7 @@ pub(crate) async fn resend_msgs_ext(
             msg.param.set(Param::Arg4, to_fingerprint.clone());
             if let Some(json) = broadcast_reactions::render_json(context, &[msg.id]).await? {
                 // The returned reaction array for the message may be empty,
-                // so rejoining members get reactions cleared as neccessary.
+                // so rejoining members get reactions cleared as necessary.
                 msg.param.set(Param::BroadcastReactions, json);
             }
         }

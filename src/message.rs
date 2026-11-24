@@ -638,7 +638,7 @@ impl Message {
 
     /// Returns additional text which is appended to the message's text field
     /// when it is loaded from the database.
-    /// Currently this is used to add infomation to pre-messages of what the download will be and how large it is
+    /// Currently this is used to add information to pre-messages of what the download will be and how large it is
     fn get_additional_text(
         context: &Context,
         download_state: DownloadState,
@@ -1543,8 +1543,8 @@ pub(crate) fn guess_msgtype_from_path_suffix(path: &Path) -> Option<(Viewtype, &
         // make sure, all target UIs support that type.
         //
         // it is a non-goal to support as many formats as possible in-app.
-        // additional parser come at security and maintainance costs and
-        // should only be added when strictly neccessary,
+        // additional parser come at security and maintenance costs and
+        // should only be added when strictly necessary,
         // eg. when a format comes from the camera app on a significant number of devices.
         // it is okay, when eg. dragging some video from a browser results in a "File"
         // for everyone, sender as well as all receivers.

@@ -2,7 +2,7 @@ use deltachat_contact_tools::EmailAddress;
 use regex::Regex;
 
 use super::*;
-use crate::chat::{CantSendReason, ChatId, add_contact_to_chat, remove_contact_from_chat};
+use crate::chat::{CantSendReason, Chat, ChatId, add_contact_to_chat, remove_contact_from_chat};
 use crate::chatlist::Chatlist;
 use crate::constants::Chattype;
 use crate::key::self_fingerprint;
@@ -290,6 +290,18 @@ async fn test_setup_contact_ext(case: SetupContactCase) -> (TestContext, TestCon
     let msg = get_chat_msg(&bob, bob_chat.get_id(), 0, 1).await;
     assert!(msg.is_info());
     assert_eq!(msg.get_text(), messages_e2ee_info_msg(&bob));
+
+    // At the end of securejoin each side must have the other side key stored.
+    // Make sure we don't accidentally store our own public key too.
+    for ctx in [&alice, &bob] {
+        let count: u32 = ctx
+            .sql
+            .query_get_value("SELECT COUNT(*) FROM public_keys", ())
+            .await
+            .expect("Failed to count public keys")
+            .unwrap();
+        assert_eq!(count, 1);
+    }
 
     (alice, bob)
 }
